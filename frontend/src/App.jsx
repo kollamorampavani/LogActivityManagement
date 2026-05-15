@@ -4,6 +4,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import StudentDashboard from './pages/StudentDashboard';
 import AdminDashboard from './pages/AdminDashboard';
+import Profile from './pages/Profile';
+import ForgotPassword from './pages/ForgotPassword';
 
 const ProtectedRoute = ({ children, role }) => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -19,7 +21,7 @@ const ProtectedRoute = ({ children, role }) => {
 function App() {
     return (
         <Router>
-            <div className="min-h-screen flex flex-col relative overflow-hidden bg-slate-50 font-sans text-slate-800">
+            <div className="min-h-screen flex flex-col relative overflow-hidden bg-slate-50 dark:bg-slate-900 font-sans text-slate-800 dark:text-slate-100 transition-colors duration-300">
                 {/* Modern CSS Mesh Gradient Background */}
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-400 opacity-20 blur-[120px] pointer-events-none"></div>
                 <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-purple-400 opacity-20 blur-[120px] pointer-events-none"></div>
@@ -32,6 +34,15 @@ function App() {
                     <Routes>
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
+                        <Route path="/forgot-password" element={<ForgotPassword />} />
+                        <Route 
+                            path="/profile" 
+                            element={
+                                <ProtectedRoute>
+                                    <Profile />
+                                </ProtectedRoute>
+                            } 
+                        />
                         <Route 
                             path="/student" 
                             element={

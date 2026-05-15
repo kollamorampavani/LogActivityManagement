@@ -6,7 +6,7 @@ exports.addLog = async (req, res) => {
     try {
         const newLog = await pool.query(
             'INSERT INTO logs (student_id, title, description, category, status) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [student_id, title, description, category || 'General', status || 'pending']
+            [student_id, title, description, category || 'Internship', status || 'pending']
         );
         res.status(201).json(newLog.rows[0]);
     } catch (err) {

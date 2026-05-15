@@ -70,9 +70,9 @@ const AdminDashboard = () => {
     ];
     const COLORS = ['#4f46e5', '#f472b6'];
 
-    const categories = [...new Set(filteredLogs.map(l => l.category || 'General'))];
+    const categories = [...new Set(filteredLogs.map(l => l.category || 'Internship'))];
     const barData = categories.map(cat => {
-        const catLogs = filteredLogs.filter(l => (l.category || 'General') === cat);
+        const catLogs = filteredLogs.filter(l => (l.category || 'Internship') === cat);
         return {
             name: cat,
             Completed: catLogs.filter(l => l.status === 'completed').length,
@@ -82,34 +82,34 @@ const AdminDashboard = () => {
     });
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-8 animate-fade-in-up">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
-                    <div className="bg-blue-100 p-3 rounded-lg text-blue-600">
+                <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 flex items-center space-x-4 transition-colors duration-300">
+                    <div className="bg-blue-100 dark:bg-blue-900/50 p-3 rounded-lg text-blue-600 dark:text-blue-400">
                         <Users className="h-8 w-8" />
                     </div>
                     <div>
-                        <p className="text-gray-500 text-sm font-medium">Total Students</p>
-                        <p className="text-3xl font-bold text-gray-800">{students.length}</p>
+                        <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Total Students</p>
+                        <p className="text-3xl font-bold text-gray-800 dark:text-white">{students.length}</p>
                     </div>
                 </div>
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
-                    <div className="bg-indigo-100 p-3 rounded-lg text-indigo-600">
+                <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 flex items-center space-x-4 transition-colors duration-300">
+                    <div className="bg-indigo-100 dark:bg-indigo-900/50 p-3 rounded-lg text-indigo-600 dark:text-indigo-400">
                         <FileText className="h-8 w-8" />
                     </div>
                     <div>
-                        <p className="text-gray-500 text-sm font-medium">Total Logs</p>
-                        <p className="text-3xl font-bold text-gray-800">{logs.length}</p>
+                        <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Total Logs</p>
+                        <p className="text-3xl font-bold text-gray-800 dark:text-white">{logs.length}</p>
                     </div>
                 </div>
             </div>
 
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <h3 className="text-xl font-bold text-gray-800 mb-4">Students</h3>
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Students</h3>
                 <div className="flex flex-wrap gap-2">
                     <button 
                         onClick={() => setSelectedStudentId(null)}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition ${selectedStudentId === null ? 'bg-indigo-600 text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition ${selectedStudentId === null ? 'bg-indigo-600 text-white shadow-md' : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600'}`}
                     >
                         All Students
                     </button>
@@ -117,7 +117,7 @@ const AdminDashboard = () => {
                         <button 
                             key={student.id}
                             onClick={() => setSelectedStudentId(student.id)}
-                            className={`px-4 py-2 rounded-lg text-sm font-medium transition ${selectedStudentId === student.id ? 'bg-indigo-600 text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                            className={`px-4 py-2 rounded-lg text-sm font-medium transition ${selectedStudentId === student.id ? 'bg-indigo-600 text-white shadow-md' : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600'}`}
                         >
                             {student.name}
                         </button>
@@ -125,33 +125,33 @@ const AdminDashboard = () => {
                 </div>
             </div>
 
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-6 text-center uppercase tracking-wider text-indigo-600">
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 mb-6 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-6 text-center uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
                     {selectedStudentId ? 'Student Task Statistics' : 'Overall Task Statistics'}
                 </h3>
                     
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* Data Table */}
                         <div className="overflow-x-auto flex items-center justify-center">
-                            <table className="w-full max-w-xs text-sm text-left text-gray-500 border border-gray-200">
-                                <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200 text-center">
+                            <table className="w-full max-w-xs text-sm text-left text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-slate-700 transition-colors duration-300">
+                                <thead className="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-slate-700/50 border-b border-gray-200 dark:border-slate-700 text-center">
                                     <tr>
-                                        <th className="px-4 py-3 border-r">Work Tasks</th>
-                                        <th className="px-4 py-3 border-r">Completed</th>
+                                        <th className="px-4 py-3 border-r dark:border-slate-700">Work Tasks</th>
+                                        <th className="px-4 py-3 border-r dark:border-slate-700">Completed</th>
                                         <th className="px-4 py-3">Undone</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {barData.map((stat, idx) => (
-                                        <tr key={idx} className="bg-white border-b text-center">
-                                            <td className="px-4 py-2 border-r font-medium text-gray-900">{stat.name}</td>
-                                            <td className="px-4 py-2 border-r text-indigo-600 font-bold">{stat.Completed}</td>
+                                        <tr key={idx} className="bg-white dark:bg-slate-800 border-b dark:border-slate-700 text-center">
+                                            <td className="px-4 py-2 border-r dark:border-slate-700 font-medium text-gray-900 dark:text-white">{stat.name}</td>
+                                            <td className="px-4 py-2 border-r dark:border-slate-700 text-indigo-600 dark:text-indigo-400 font-bold">{stat.Completed}</td>
                                             <td className="px-4 py-2 text-pink-500 font-bold">{stat.Undone}</td>
                                         </tr>
                                     ))}
-                                    <tr className="bg-gray-50 font-bold text-center">
-                                        <td className="px-4 py-2 border-r text-gray-900">All</td>
-                                        <td className="px-4 py-2 border-r text-indigo-600">{pieData[0].value}</td>
+                                    <tr className="bg-gray-50 dark:bg-slate-700/50 font-bold text-center">
+                                        <td className="px-4 py-2 border-r dark:border-slate-700 text-gray-900 dark:text-white">All</td>
+                                        <td className="px-4 py-2 border-r dark:border-slate-700 text-indigo-600 dark:text-indigo-400">{pieData[0].value}</td>
                                         <td className="px-4 py-2 text-pink-500">{pieData[1].value}</td>
                                     </tr>
                                 </tbody>
@@ -196,9 +196,9 @@ const AdminDashboard = () => {
                     </div>
                 </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                <div className="p-6 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <h3 className="text-xl font-bold text-gray-800">
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden transition-colors duration-300">
+                <div className="p-6 border-b border-gray-100 dark:border-slate-700 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <h3 className="text-xl font-bold text-gray-800 dark:text-white">
                         {selectedStudentId 
                             ? `${students.find(s => s.id === selectedStudentId)?.name}'s Logs`
                             : 'All Student Logs'
@@ -210,7 +210,7 @@ const AdminDashboard = () => {
                             <input 
                                 type="text" 
                                 placeholder="Search logs..." 
-                                className="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm w-full sm:w-64"
+                                className="pl-10 pr-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm w-full sm:w-64 bg-white dark:bg-slate-700 text-gray-900 dark:text-white transition-colors duration-300"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -218,7 +218,7 @@ const AdminDashboard = () => {
                         <div className="relative">
                             <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                             <select 
-                                className="pl-10 pr-8 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm appearance-none bg-white w-full sm:w-auto"
+                                className="pl-10 pr-8 py-2 border border-gray-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm appearance-none bg-white dark:bg-slate-700 text-gray-900 dark:text-white w-full sm:w-auto transition-colors duration-300"
                                 value={filterStatus}
                                 onChange={(e) => setFilterStatus(e.target.value)}
                             >
@@ -228,10 +228,10 @@ const AdminDashboard = () => {
                                 <option value="completed">Completed</option>
                             </select>
                         </div>
-                        <label className="flex items-center space-x-2 text-sm text-gray-700 font-medium cursor-pointer bg-gray-50 px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-100 transition">
+                        <label className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300 font-medium cursor-pointer bg-gray-50 dark:bg-slate-700/50 px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-600 transition">
                             <input 
                                 type="checkbox" 
-                                className="rounded text-indigo-600 focus:ring-indigo-500 w-4 h-4"
+                                className="rounded text-indigo-600 focus:ring-indigo-500 w-4 h-4 bg-white dark:bg-slate-800 border-gray-300 dark:border-slate-600"
                                 checked={pendingActionFilter}
                                 onChange={(e) => setPendingActionFilter(e.target.checked)}
                             />
@@ -240,36 +240,36 @@ const AdminDashboard = () => {
                     </div>
                 </div>
 
-                <div className="divide-y divide-gray-100">
+                <div className="divide-y divide-gray-100 dark:divide-slate-700">
                     {filteredLogs.length === 0 ? (
-                        <div className="p-8 text-center text-gray-500">No logs match your criteria.</div>
+                        <div className="p-8 text-center text-gray-500 dark:text-gray-400">No logs match your criteria.</div>
                     ) : (
                         filteredLogs.map(log => (
-                            <div key={log.id} className="p-6 hover:bg-gray-50 transition">
+                            <div key={log.id} className="p-6 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors duration-300">
                                 <div className="flex flex-col md:flex-row md:justify-between gap-4">
                                     <div className="flex-1">
                                         <div className="flex items-center space-x-3 mb-2">
-                                            <h4 className="text-lg font-bold text-gray-800">{log.title}</h4>
+                                            <h4 className="text-lg font-bold text-gray-800 dark:text-white">{log.title}</h4>
                                             <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                                log.status === 'completed' ? 'bg-green-100 text-green-700' :
-                                                log.status === 'in_progress' ? 'bg-blue-100 text-blue-700' :
-                                                'bg-yellow-100 text-yellow-700'
+                                                log.status === 'completed' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                                                log.status === 'in_progress' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :
+                                                'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
                                             }`}>
                                                 {log.status.replace('_', ' ').toUpperCase()}
                                             </span>
                                         </div>
-                                        <p className="text-sm font-medium text-indigo-600 mb-2">
+                                        <p className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mb-2">
                                             {log.student_name} ({log.student_email})
-                                            <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-700 rounded text-xs font-semibold">{log.category || 'General'}</span>
+                                            <span className="ml-2 px-2 py-0.5 bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 rounded text-xs font-semibold">{log.category || 'Internship'}</span>
                                         </p>
-                                        <p className="text-gray-600 mb-4">{log.description}</p>
+                                        <p className="text-gray-600 dark:text-gray-400 mb-4">{log.description}</p>
                                         
                                         {log.comments?.length > 0 && (
                                             <div className="mb-4 space-y-2">
                                                 {log.comments.map(c => (
-                                                    <div key={c.id} className="bg-white p-3 rounded-lg text-sm border border-gray-200">
-                                                        <span className="font-semibold text-gray-700 mr-2">{c.admin_name}:</span>
-                                                        <span className="text-gray-600">{c.comment}</span>
+                                                    <div key={c.id} className="bg-white dark:bg-slate-800 p-3 rounded-lg text-sm border border-gray-200 dark:border-slate-600">
+                                                        <span className="font-semibold text-gray-700 dark:text-gray-300 mr-2">{c.admin_name}:</span>
+                                                        <span className="text-gray-600 dark:text-gray-400">{c.comment}</span>
                                                     </div>
                                                 ))}
                                             </div>
@@ -280,7 +280,7 @@ const AdminDashboard = () => {
                                                 <input 
                                                     type="text" 
                                                     placeholder="Add a comment..." 
-                                                    className="flex-1 px-3 py-1.5 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                                                    className="flex-1 px-3 py-1.5 border border-gray-200 dark:border-slate-600 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white dark:bg-slate-700 text-gray-900 dark:text-white transition-colors duration-300"
                                                     value={commentInputs[log.id] || ''}
                                                     onChange={(e) => setCommentInputs({...commentInputs, [log.id]: e.target.value})}
                                                     onKeyPress={(e) => e.key === 'Enter' && handleAddComment(log.id)}
@@ -297,7 +297,7 @@ const AdminDashboard = () => {
                                                     <button 
                                                         key={reaction}
                                                         onClick={() => handleAddReaction(log.id, reaction)}
-                                                        className="px-2 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition"
+                                                        className="px-2 py-1.5 bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 text-gray-800 dark:text-gray-200 rounded-lg text-sm transition"
                                                         title={reaction}
                                                     >
                                                         {reaction.split(' ')[0]}
@@ -308,7 +308,7 @@ const AdminDashboard = () => {
                                         {log.reactions?.length > 0 && (
                                             <div className="mt-3 flex gap-2">
                                                 {log.reactions.map(r => (
-                                                    <span key={r.id} className="text-xs bg-gray-100 px-2 py-1 rounded-md text-gray-600">
+                                                    <span key={r.id} className="text-xs bg-gray-100 dark:bg-slate-700 px-2 py-1 rounded-md text-gray-600 dark:text-gray-300">
                                                         {r.reaction_type}
                                                     </span>
                                                 ))}

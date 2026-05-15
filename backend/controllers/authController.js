@@ -71,3 +71,48 @@ exports.login = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+exports.getProfile = async (req, res) => {
+    try {
+        const result = await pool.query('SELECT id, name, email, role, created_at FROM users WHERE id = $1', [req.user.id]);
+        if (result.rows.length === 0) return res.status(404).json({ message: 'User not found' });
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+exports.updateProfile = async (req, res) => {
+    const { name, email } = req.body;
+    try {
+        const emailCheck = await pool.query('SELECT * FROM users WHERE email = $1 AND id != $2', [email, req.user.id]);
+        if (emailCheck.rows.length > 0) return res.status(400).json({ message: 'Email already in use' });
+
+        const result = await pool.query(
+            'UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING id, name, email, role',
+            [name, email, req.user.id]
+        );
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+exports.resetPassword = async (req, res) => {
+    const { email, newPassword } = req.body;
+    try {
+        const userExists = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+        if (userExists.rows.length === 0) return res.status(404).json({ message: 'No user found with this email' });
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        await pool.query('UPDATE users SET password = $1 WHERE email = $2', [hashedPassword, email]);
+        res.json({ message: 'Password reset successful' });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
