@@ -1,12 +1,37 @@
 const pool = require('../config/db');
 
+const isValidDate = (dateString) => {
+    if (!dateString) return false;
+    const dateObj = new Date(dateString);
+    if (isNaN(dateObj)) return false;
+    
+    // dateString is typically YYYY-MM-DD or a JS Date string
+    const dStr = typeof dateString === 'string' && dateString.includes('T') ? dateString.split('T')[0] : 
+                 (typeof dateString === 'object' ? dateString.toISOString().split('T')[0] : dateString);
+                 
+    const [year, month, day] = dStr.split('-');
+    const logDate = new Date(year, month - 1, day);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const diffTime = logDate.getTime() - today.getTime();
+    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+    
+    return diffDays >= -1 && diffDays <= 1;
+};
+
 exports.addLog = async (req, res) => {
-    const { title, description, category, status } = req.body;
+    const { title, description, category, status, date } = req.body;
     const student_id = req.user.id;
     try {
+        const logDate = date || new Date().toISOString().split('T')[0];
+        if (!isValidDate(logDate)) {
+            return res.status(400).json({ message: 'You can only add logs for Yesterday, Today, or Tomorrow.' });
+        }
+
         const newLog = await pool.query(
-            'INSERT INTO logs (student_id, title, description, category, status) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [student_id, title, description, category || 'Internship', status || 'pending']
+            'INSERT INTO logs (student_id, title, description, category, status, log_date) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            [student_id, title, description, category || 'Internship', status || 'pending', logDate]
         );
         res.status(201).json(newLog.rows[0]);
     } catch (err) {
@@ -17,11 +42,20 @@ exports.addLog = async (req, res) => {
 
 exports.getOwnLogs = async (req, res) => {
     const student_id = req.user.id;
+    const { date } = req.query;
     try {
-        const logs = await pool.query(
-            'SELECT * FROM logs WHERE student_id = $1 ORDER BY created_at DESC',
-            [student_id]
-        );
+        let logs;
+        if (date) {
+            logs = await pool.query(
+                'SELECT * FROM logs WHERE student_id = $1 AND log_date = $2 ORDER BY created_at DESC',
+                [student_id, date]
+            );
+        } else {
+            logs = await pool.query(
+                'SELECT * FROM logs WHERE student_id = $1 ORDER BY log_date DESC, created_at DESC',
+                [student_id]
+            );
+        }
         
         // Fetch comments and reactions for each log
         const logsWithDetails = await Promise.all(logs.rows.map(async (log) => {
@@ -39,7 +73,7 @@ exports.getOwnLogs = async (req, res) => {
 
 exports.editLog = async (req, res) => {
     const { id } = req.params;
-    const { title, description, category, status } = req.body;
+    const { title, description, category, status, date } = req.body;
     const student_id = req.user.id;
     try {
         // Check ownership
@@ -48,9 +82,19 @@ exports.editLog = async (req, res) => {
             return res.status(404).json({ message: 'Log not found or unauthorized' });
         }
 
+        const existingLogDate = logCheck.rows[0].log_date;
+        if (existingLogDate && !isValidDate(existingLogDate)) {
+            return res.status(400).json({ message: 'You cannot edit past or future logs beyond tomorrow.' });
+        }
+
+        const newLogDate = date || existingLogDate;
+        if (newLogDate && !isValidDate(newLogDate)) {
+            return res.status(400).json({ message: 'You can only edit logs for Yesterday, Today, or Tomorrow.' });
+        }
+
         const updatedLog = await pool.query(
-            'UPDATE logs SET title = $1, description = $2, category = $3, status = $4 WHERE id = $5 AND student_id = $6 RETURNING *',
-            [title, description, category, status, id, student_id]
+            'UPDATE logs SET title = $1, description = $2, category = $3, status = $4, log_date = $5 WHERE id = $6 AND student_id = $7 RETURNING *',
+            [title, description, category, status, newLogDate, id, student_id]
         );
         res.json(updatedLog.rows[0]);
     } catch (err) {

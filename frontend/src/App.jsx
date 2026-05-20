@@ -30,7 +30,7 @@ function App() {
                 
                 <div className="relative z-10 flex flex-col min-h-screen">
                     <Navbar />
-                    <main className="flex-grow container mx-auto px-4 py-10">
+                    <main className="flex-grow w-full max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
                     <Routes>
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />

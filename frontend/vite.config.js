@@ -9,6 +9,11 @@ export default defineConfig({
 
   server: {
     proxy: {
+      '/pavani/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/pavani\/api/, '/api'),
+      },
       '/api': {
         target: 'http://localhost:5000',
         changeOrigin: true,

@@ -1,13 +1,31 @@
 const pool = require('../config/db');
 
 exports.getAllLogs = async (req, res) => {
+    const { date, student_id } = req.query;
     try {
-        const result = await pool.query(`
+        let queryStr = `
             SELECT l.*, u.name as student_name, u.email as student_email 
             FROM logs l 
             JOIN users u ON l.student_id = u.id 
-            ORDER BY l.created_at DESC
-        `);
+            WHERE 1=1
+        `;
+        const params = [];
+        let paramIndex = 1;
+
+        if (date) {
+            queryStr += ` AND l.log_date = $${paramIndex}`;
+            params.push(date);
+            paramIndex++;
+        }
+        if (student_id) {
+            queryStr += ` AND l.student_id = $${paramIndex}`;
+            params.push(student_id);
+            paramIndex++;
+        }
+
+        queryStr += ` ORDER BY l.log_date DESC, l.created_at DESC`;
+
+        const result = await pool.query(queryStr, params);
         
         const logsWithDetails = await Promise.all(result.rows.map(async (log) => {
             const comments = await pool.query('SELECT c.*, u.name as admin_name FROM comments c JOIN users u ON c.admin_id = u.id WHERE c.log_id = $1', [log.id]);
